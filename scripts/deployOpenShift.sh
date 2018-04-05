@@ -476,7 +476,7 @@ openshift_logging_kibana_nodeselector={"type":"infra"}
 openshift_logging_curator_nodeselector={"type":"infra"}
 openshift_master_logging_public_url=https://kibana.$ROUTING
 openshift_logging_master_public_url=https://$MASTERPUBLICIPHOSTNAME:8443
-#openshift_logging_storage_labels={'storage': 'logging'}
+openshift_logging_storage_labels={'storage': 'logging'}
 
 # host group for masters
 [masters]
@@ -539,7 +539,7 @@ runuser -l $SUDOUSER -c "ansible all -b -m service -a \"name=NetworkManager stat
 # Initiating installation of OpenShift Container Platform using Ansible Playbook
 echo $(date) " - Installing OpenShift Container Platform via Ansible Playbook"
 
-runuser -l $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml"
+runuser -l $SUDOUSER -c "ansible-playbook -e openshift_disable_check=package_version /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml"
 
 if [ $? -eq 0 ]
 then
@@ -666,8 +666,8 @@ then
 
 	echo $(date) "- Rebooting cluster to complete installation"
 	
-	runuser -l $SUDOUSER -c  "oc label nodes $MASTER-0 openshift-infra=apiserver"
-	runuser -l $SUDOUSER -c  "oc label nodes --all logging-infra-fluentd=true logging=true"
+	runuser -l $SUDOUSER -c  "oc label nodes $MASTER-0 openshift-infra=apiserver --overwrite"
+	runuser -l $SUDOUSER -c  "oc label nodes --all logging-infra-fluentd=true logging=true --overwrite"
 	runuser -l $SUDOUSER -c "ansible-playbook ~/reboot-master.yml"
 	runuser -l $SUDOUSER -c "ansible-playbook ~/reboot-nodes.yml"
 	sleep 10

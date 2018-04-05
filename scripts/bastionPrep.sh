@@ -31,7 +31,8 @@ else
    exit 3
 fi
 
-subscription-manager attach --pool=$POOL_ID > attach.log
+subscription-manager attach --pool=8a85f9815d36174d015d36773c181b75 > attach.log
+subscription-manager attach --pool=$POOL_ID >> attach.log
 if [ $? -eq 0 ]
 then
    echo "Pool attached successfully"
@@ -69,6 +70,11 @@ atomic-openshift-excluder unexclude
 echo $(date) " - Installing OpenShift utilities"
 
 yum -y install atomic-openshift-utils
+
+# Install ansible
+echo $(date) " - Installing Ansible"
+
+yum -y install ansible
 
 # Create playbook to update ansible.cfg file to include path to library
 

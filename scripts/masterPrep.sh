@@ -26,7 +26,8 @@ else
    exit 3
 fi
 
-subscription-manager attach --pool=$POOL_ID > attach.log
+subscription-manager attach --pool=8a85f9815d36174d015d36773c181b75 > attach.log
+subscription-manager attach --pool=$POOL_ID >> attach.log
 if [ $? -eq 0 ]
 then
    echo "Pool attached successfully"
@@ -82,11 +83,7 @@ yum -y install atomic-openshift-utils
 # Install Docker 1.12.x
 echo $(date) " - Installing Docker 1.12.x"
 
-yum -y install docker-1.12.6
-
-yum -y install yum-plugin-versionlock
-yum versionlock docker-client-1.12.6 docker-common-1.12.6 docker-rhel-push-plugin-1.12.6 docker-1.12.6
-
+yum -y install docker
 sed -i -e "s#^OPTIONS='--selinux-enabled'#OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16'#" /etc/sysconfig/docker
 
 # Create thin pool logical volume for Docker
@@ -138,7 +135,7 @@ provisioner: kubernetes.io/azure-disk
 parameters:
   kind: managed
   location: ${LOCATION}
-  storageaccounttype: Premium_LRS
+  storageaccounttype: Standard_LRS
 EOF
 fi
 
