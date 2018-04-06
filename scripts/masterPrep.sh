@@ -26,7 +26,8 @@ else
    exit 3
 fi
 
-subscription-manager attach --pool=$POOL_ID > attach.log
+subscription-manager attach --pool=8a85f9815d36174d015d36773c181b75 > attach.log
+subscription-manager attach --pool=$POOL_ID >> attach.log
 if [ $? -eq 0 ]
 then
    echo "Pool attached successfully"
@@ -134,7 +135,7 @@ provisioner: kubernetes.io/azure-disk
 parameters:
   kind: managed
   location: ${LOCATION}
-  storageaccounttype: Premium_LRS
+  storageaccounttype: Standard_LRS
 EOF
 fi
 
