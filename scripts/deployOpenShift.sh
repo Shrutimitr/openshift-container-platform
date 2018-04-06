@@ -438,7 +438,7 @@ os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
 console_port=443
 openshift_cloudprovider_kind=azure
 osm_default_node_selector='type=app'
-openshift_disable_check=memory_availability,docker_image_availability
+openshift_disable_check=disk_availability,memory_availability,package_availability,docker_image_availability,docker_storage,package_version
 
 # default selectors for router and registry services
 openshift_router_selector='type=infra'
@@ -539,7 +539,7 @@ runuser -l $SUDOUSER -c "ansible all -b -m service -a \"name=NetworkManager stat
 # Initiating installation of OpenShift Container Platform using Ansible Playbook
 echo $(date) " - Installing OpenShift Container Platform via Ansible Playbook"
 
-runuser -l $SUDOUSER -c "ansible-playbook -e openshift_disable_check=package_version /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml"
+runuser -l $SUDOUSER -c "ansible-playbook -e openshift_disable_check=disk_availability,memory_availability,package_availability,docker_image_availability,docker_storage,package_version /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml"
 
 if [ $? -eq 0 ]
 then
